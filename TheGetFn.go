@@ -82,11 +82,25 @@ func (t *SampleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 	switch function {
 
     case "getRowTableOne":
-  		if len(args) < 2 {
+  		if len(args) < 1 {
   		 fmt.Printf("getRowTableOne failed. Must include key values")
 			 	return nil, errors.New("Expected atleast 1 arguments for query")
   		}
 
+		
+		col1Val := args[0]
+		var columns []shim.Column
+		col1 := shim.Column{Value: &shim.Column_String_{String_: col1Val}}
+		columns = append(columns, col1)
+
+		row, err := stub.GetRow("tableOne", columns)
+		if err != nil {
+			return nil, fmt.Errorf("getRowTableOne operation failed. %s", err)
+		}
+
+		rowString := fmt.Sprintf("%s", row)
+		return []byte(rowString), nil
+		/*
 			var columns []shim.Column
 			var op = args[1]
 
@@ -135,7 +149,7 @@ func (t *SampleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 
   		rowString := fmt.Sprintf("%s", row)
   		return []byte(rowString), nil
-
+*/
 
   case "getRowsTableOne":
   if len(args) < 1 {
