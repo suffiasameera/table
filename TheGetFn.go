@@ -87,7 +87,7 @@ func (t *SampleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 			 	return nil, errors.New("Expected atleast 1 arguments for query")
   		}
 
-		
+
 		col1Val := args[0]
 		var columns []shim.Column
 		col1 := shim.Column{Value: &shim.Column_String_{String_: col1Val}}
@@ -95,7 +95,8 @@ func (t *SampleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 
 		row, err := stub.GetRow("tableOne", columns)
 		if err != nil {
-			return nil, fmt.Errorf("getRowTableOne operation failed. %s", err)
+			fmt.Printf("getRowTableOne operation failed. %s", err)
+			return nil, err
 		}
 
 		rowString := fmt.Sprintf("%s", row)
